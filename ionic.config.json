@@ -1,0 +1,7 @@
+{
+  "name": "presupuestoApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

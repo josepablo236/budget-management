@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Gráficas de datos</ion-title>
+    <span class="options" (click)="onClose()"><ion-icon name="close-outline"></ion-icon></span>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card style="margin-top: 1rem;">
+    <ion-card-header>
+      <ion-card-title class="card-title">Cambio del valor del presupuesto en el tiempo</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p style="text-align: center; margin-bottom: 1rem;">Esta gráfica muestra el cambio del valor inicial conforme se van agregando nuevos movimientos de dinero.</p>
+      <canvas id="chart2"></canvas>
+    </ion-card-content>
+  </ion-card>
+  <ion-card style="margin-top: 1rem;">
+    <ion-card-header>
+      <ion-card-title class="card-title">Distribución de gastos</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <p style="text-align: center; margin-bottom: 1rem;">Esta gráfica muestra cómo se distribuye el total de tus gastos en las diferentes categorías.</p>
+      <p *ngIf="budget.expenses === 0" style="text-align: center; margin-bottom: 1rem; margin-top: 1rem;">No existen gastos agregados.</p>
+      <div style="display: flex; justify-content: center; align-items: center; margin: auto;">
+        <canvas id="chart1" width="250" height="200"></canvas>
+      </div>
+      
+    </ion-card-content>
+  </ion-card>
+</ion-content>

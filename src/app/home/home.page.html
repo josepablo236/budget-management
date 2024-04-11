@@ -1,0 +1,44 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title style="font-size: 14px; text-align: center;">
+      Budget Management
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div>
+    <app-header></app-header>
+    <ion-card *ngIf="budgetList.length == 0 && !createNewBudget">
+      <ion-card-header>
+        <ion-card-title class="card-title">Aún no tienes elementos agregados</ion-card-title>
+      </ion-card-header>
+      <ion-card-content style="margin-top: -5rem; margin-bottom: 1rem;">
+        <div class="emptyList">
+          <img style="width: 100px; height: 100px;" src="assets/img/empty-budget.svg" alt="">
+          <p style="margin-top: 1rem;">Haz clic en el botón para crear un presupuesto.</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+    <ion-button *ngIf="!createNewBudget && !createMovements" (click)="createBudget()" expand="block" fill="clear" shape="round">
+      <ion-icon slot="start" name="add"></ion-icon>
+      Crear nuevo presupuesto
+    </ion-button>
+    <app-budget *ngIf="createNewBudget && !createMovements" (createEvent)="onCreateClicked()"></app-budget>
+    <ion-grid fixed *ngIf="budgetList.length > 0 && !createNewBudget && !createMovements">
+      <ion-row>
+        <ion-col *ngFor="let item of budgetList" size="12" size-lg="6">
+          <app-bugdet-detail [budget]="item" (editEvent)="onEditClicked($event)" (deleteEvent)="onDeleteClicked($event)"></app-bugdet-detail>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <app-movement *ngIf="createMovements" (backEvent)="onBackToHome($event)" [idBudget]="budgetToEdit"></app-movement>
+  </div>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" 
+  *ngIf="budgetList.length > 0 && !createNewBudget && !createMovements">
+    <ion-fab-button color="danger" (click)="onDeleteAll()">
+      <ion-icon name="trash-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

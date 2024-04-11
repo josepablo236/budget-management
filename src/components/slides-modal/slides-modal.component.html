@@ -1,0 +1,18 @@
+<ion-content>
+  <div class="swiper-container">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide" *ngFor="let slide of slides">
+        <div class="slide-content">
+          <h2>{{ slide.title }}</h2>
+          <img [src]="slide.image" alt="Slide Image" style="width: 200px; height: 200px;">
+          <p>{{ slide.text }}</p>
+          <p *ngIf="slides[0] === slide">Desliza a la izquierda para continuar.</p>
+        </div>
+      </div>
+    </div>
+    <div class="swiper-pagination"></div>
+  </div>
+  <ion-button style="margin-top: 10px;" *ngIf="isLastSlide()" (click)="closeModal()" expand="block" fill="clear">
+    Comenzar
+  </ion-button>
+</ion-content>

@@ -1,0 +1,36 @@
+.card-title{
+    font-size: 18px;
+    text-align: center;
+}
+
+.input{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.card-subtitle{
+    font-size: 12px;
+    text-align: center;
+}
+
+.options{
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    right: 20px; 
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.back{
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 20px; 
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.emptyList{
+    text-align: center;
+  }

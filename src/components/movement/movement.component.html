@@ -1,0 +1,145 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title class="card-title">{{budget.name}}</ion-card-title>
+    <ion-card-subtitle class="card-subtitle">{{budget.date}}</ion-card-subtitle>
+    <span class="back"><ion-icon (click)="onBack()" name="arrow-back-outline"></ion-icon></span>
+    <span class="options" *ngIf="budget.categories.length > 0" [id]="'popover-on-' + budget.idBudget"><ion-icon name="ellipsis-horizontal-outline"></ion-icon></span>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-list *ngIf="budgetCategories.length > 0">
+
+      <ion-item lines="none">
+        <ion-label>Valor inicial: </ion-label>
+        <ion-label slot="end">{{budget.initialValue}}</ion-label>
+      </ion-item>
+      <ion-accordion-group [multiple]="true">
+        <ion-accordion [value]="c.idCategory" *ngFor="let c of budgetCategories">
+            <ion-item slot="header" color="light">
+              <ion-label>{{c.name}}</ion-label>
+              <ion-label slot="end" [ngClass]="{redNumber: c.type === 'expense', greenNumber: c.type === 'income'}">
+                <span *ngIf="c.type === 'expense'" class="redNumber">(-)</span>
+                <span *ngIf="c.type === 'income'" class="greenNumber">(+)</span>
+                {{c.amount}}
+              </ion-label>
+            </ion-item>
+          <div class="ion-padding" slot="content">
+            <ion-list *ngIf="c.movements.length > 0">
+              <ion-item-sliding *ngFor="let item of c.movements">
+                <ion-item>
+                  <ion-label>{{item.description}}</ion-label>
+                  <ion-label slot="end" [ngClass]="{redNumber: item.type === 'expense', greenNumber: item.type === 'income'}">
+                    <span *ngIf="item.type === 'expense'" class="redNumber">(-)</span>
+                    <span *ngIf="item.type === 'income'" class="greenNumber">(+)</span>
+                    {{item.amount}}
+                  </ion-label>
+                </ion-item>
+                <ion-item-options side="end">
+                  <ion-item-option color="primary" (click)="editMovement(item)">
+                    Editar
+                  </ion-item-option>
+                  <ion-item-option color="danger" (click)="deleteMovement(item)">
+                    Eliminar
+                  </ion-item-option>
+                </ion-item-options>
+              </ion-item-sliding>
+            </ion-list>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+      <ion-item lines="none">
+        <ion-label class="total">Total: </ion-label>
+        <ion-label slot="end" class="total" [ngClass]="{greenNumber: budget.total > 0, redNumber: budget.total < 0}">{{budget.total}}</ion-label>
+      </ion-item>
+    </ion-list>
+
+    <div *ngIf="budget.categories.length == 0" class="emptyList">
+      <img style="width: 150px; height: 150px;" src="assets/img/empty-move.svg" alt="">
+      <p>Aún no tienes movimientos agregados</p>
+    </div>
+    <ion-button id="open-modal" expand="block" fill="clear" shape="round">
+      <ion-icon slot="start" name="add"></ion-icon>
+      Crear nuevo movimiento
+    </ion-button>
+  </ion-card-content>
+</ion-card>
+
+<div style="padding-right: 30px; padding-left: 30px; margin-bottom: 1rem;">
+  <ion-button *ngIf="budget.categories.length > 0" class="button-fill" (click)="presentCharts()" style="margin-top: 2rem;" expand="block" shape="round">
+    <ion-icon slot="start" name="analytics-outline"></ion-icon>
+    Ver gráficas
+  </ion-button>
+</div>
+
+
+<ion-modal #modal trigger="open-modal" [canDismiss]="canDismiss">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="end">
+          <ion-button (click)="modal.dismiss()">Cerrar</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content class="ion-padding">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title class="card-title">Ingresar movimiento</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <form #myForm="ngForm" (ngSubmit)="onSubmit()">
+            <ion-item class="input">
+              <ion-input 
+                label="Descripción:" 
+                label-placement="floating" fill="outline" 
+                type="text" placeholder="Ingresa una descripción" 
+                name="description" [(ngModel)]="description"
+                min="0" max="30" required>
+              </ion-input>
+            </ion-item>
+            <ion-item class="input">
+              <ion-input 
+                label="Valor:" 
+                label-placement="floating" fill="outline" 
+                type="number" placeholder="Valor en quetzales" 
+                name="amount" [(ngModel)]="amount"
+                min="1" max="1000000" required>
+              </ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label>Tipo de movimiento:</ion-label>
+                <ion-radio-group name="movement" value="expense" [(ngModel)]="type" style="margin-top: 5px; margin-bottom: 5px;">
+                  <ion-item>
+                    <ion-label>Gasto</ion-label>
+                    <ion-radio value="expense"></ion-radio>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label>Ingreso</ion-label>
+                    <ion-radio value="income"></ion-radio>
+                  </ion-item>
+                </ion-radio-group>
+            </ion-item>
+            <ion-item *ngIf="type === 'expense'">
+              <ion-select mode="ios" name="category" label="Selecciona una categoria" [(ngModel)]="category" label-placement="floating" required>
+                <ion-select-option mode="ios" *ngFor="let cat of selectCategories" [value]="cat.value">{{cat.text}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+            <ion-button class="button-fill" expand="block" shape="round" type="submit" [disabled]="!myForm.valid">Guardar</ion-button>
+          </form>
+        </ion-card-content>
+      </ion-card>
+    </ion-content>
+  </ng-template>
+</ion-modal>
+
+<ion-popover mode="ios" [trigger]="'popover-on-' + budget.idBudget" [dismissOnSelect]="true">
+  <ng-template>
+    <ion-content>
+      <ion-list>
+        <ion-item [button]="true" [detail]="false" (click)="deleteMovements()">
+          <ion-icon color="danger" style="font-size: 18px;" slot="start" name="trash-outline"></ion-icon>
+          <ion-label color="danger" style="font-size: 16px;">Eliminar todos los movimientos</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-popover>

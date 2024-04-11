@@ -1,0 +1,32 @@
+.swiper-container {
+    width: 100%;
+    height: 70%;
+  }
+  
+  .swiper-slide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .slide-content {
+    margin-top: 10rem;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .slide-content img {
+    max-width: 100%;
+  }
+  
+  .slide-content h2 {
+    margin-top: 10px; 
+  }
+
+  .slide-content p {
+    color: #999999;
+  }
